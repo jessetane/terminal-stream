@@ -1,0 +1,24 @@
+{
+  "name": "terminal-stream",
+  "version": "1.0.0",
+  "description": "A stream for use at the terminals of circular pipelines",
+  "dependencies": {
+    "inherits": "^2.0.1",
+    "readable-stream": "^2.0.0"
+  },
+  "devDependencies": {
+    "concat-stream": "^1.5.0",
+    "tape": "^4.0.0",
+    "through2": "^2.0.0"
+  },
+  "scripts": {
+    "test": "node test",
+    "example": "node example"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jessetane/terminal-stream.git"
+  },
+  "author": "jesse.tane@gmail.com",
+  "license": "WTFPL"
+}
