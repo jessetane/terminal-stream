@@ -2,10 +2,10 @@
 A stream for use at the terminals of circular pipelines.
 
 ## Why
-Implementing streaming RPC interfaces can be a bit of a pain. Duplexifying length-prefixed-stream's encoder and decoder or piping them into another transform just feels like too much work / code!
+Implementing streaming RPC interfaces can be a bit of a pain. Duplexifying length-prefixed-stream's encoder and decoder or piping them into another transform just feels like too much streams!
 
 ## How
-Messages are sent from a terminal stream prefixed with a 32bit unsigned integer indicating their byte-length. As bits and pieces of the message reach the next terminal stream in the pipeline, they are buffered into memory until the entire content is available. Once reassembled, instead of being pushing into the read buffer, the message is emitted as an event and / or passed to the convenience handler.
+Messages are sent from a terminal stream prefixed with a 32bit unsigned integer indicating their byte-length. As bits and pieces of the message reach the next terminal stream in the pipeline, they are buffered into memory until the entire content is available. Once reassembled, instead of being pushed into the read buffer, the message is emitted as an event and / or passed to the convenience handler.
 
 ## Example
 ``` javascript
@@ -49,9 +49,27 @@ a.send(JSON.stringify({ name: 'hello' }))
 // a got: world
 ```
 
+## Require
+#### `var ts = require('terminal-stream')`
+
+## Constructor
+#### `var t = ts([onmessage])`
+
+## Methods
+#### `t = ts.send(message)`
+
+## Events
+#### `t.emit('message', message)`
+
+## Test
+Copied from [length-prefixed-stream](https://www.npmjs.com/package/length-prefixed-stream) with just the API differences changed.
+``` shell
+$ npm test
+```
+
 ## Prior art
-* [message-stream](https://www.npmjs.com/package/message-stream)
 * [length-prefixed-stream](https://www.npmjs.com/package/length-prefixed-stream)
+* [message-stream](https://www.npmjs.com/package/message-stream)
 
 ## License
 WTFPL
