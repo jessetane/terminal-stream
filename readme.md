@@ -56,7 +56,7 @@ a.send(JSON.stringify({ name: 'hello' }))
 #### `var t = ts([onmessage])`
 
 ## Methods
-#### `t = ts.send(message)`
+#### `t.send(message)`
 
 ## Events
 #### `t.emit('message', message)`
