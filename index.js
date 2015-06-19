@@ -12,8 +12,10 @@ function TerminalStream (onmessage) {
     return new TerminalStream(onmessage)
   }
 
-  this.onmessage = onmessage
+  this.onmessage = onmessage || this.onmessage
+  this._awaitingKnown = false
   this._awaiting = 0
+  this._buffer = null
 
   TransformStream.call(this)
 }
