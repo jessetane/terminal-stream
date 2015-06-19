@@ -57,6 +57,7 @@ a.send(JSON.stringify({ name: 'hello' }))
 
 ## Methods
 #### `t.send(message)`
+#### `t.close()`
 
 ## Events
 #### `t.emit('message', message)`
