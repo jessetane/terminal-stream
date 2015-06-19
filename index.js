@@ -57,3 +57,8 @@ TerminalStream.prototype.send = function (buffer, enc) {
   length.writeUIntLE(buffer.length, 0, 4)
   this.push(Buffer.concat([ length, buffer ]))
 }
+
+TerminalStream.prototype.close = function () {
+  this.emit('close')
+  this.end()
+}
