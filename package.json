@@ -1,25 +1,30 @@
 {
   "name": "terminal-stream",
+  "description": "A message oriented wrapper for stream oriented transports",
   "version": "1.1.0",
-  "description": "A stream for use at the terminals of circular pipelines",
-  "dependencies": {
-    "inherits": "^2.0.1",
-    "readable-stream": "^2.0.0"
-  },
-  "devDependencies": {
-    "concat-stream": "^1.5.0",
-    "standard": "^4.3.1",
-    "tape": "^4.0.0",
-    "through2": "^2.0.0"
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./": "./"
   },
   "scripts": {
-    "test": "standard && node test",
-    "example": "node example"
+    "test": "node test",
+    "test-browser": "ecstatic --cache no-cache --port 7357 test",
+    "example": "node example",
+    "example-browser": "ecstatic --cache no-cache --port 8080 example"
+  },
+  "dependencies": {
+    "xevents": "^1.0.4"
+  },
+  "devDependencies": {
+    "ecstatic": "^4.1.4",
+    "tap-esm": "^1.4.1",
+    "utf8-transcoder": "^2.1.0"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/jessetane/terminal-stream.git"
   },
   "author": "jesse.tane@gmail.com",
-  "license": "WTFPL"
+  "license": "MIT"
 }

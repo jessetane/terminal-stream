@@ -1,71 +1,71 @@
 # terminal-stream
-A stream for use at the terminals of circular pipelines.
+A message oriented wrapper for stream oriented transports.
 
 ## Why
-Implementing streaming RPC interfaces can be a bit of a pain. Duplexifying length-prefixed-stream's encoder and decoder or piping them into another transform just feels like too much streams!
+Implementing something like RPC over a streaming transport (e.g. TCP) requires an intermediate mechanism to ensure only complete messages are delivered to the application, even though messages may be combined or fragmented in unpredictable ways.
 
 ## How
-Messages are sent from a terminal stream prefixed with a 32bit unsigned integer indicating their byte-length. As bits and pieces of the message reach the next terminal stream in the pipeline, they are buffered into memory until the entire content is available. Once reassembled, instead of being pushed into the read buffer, the message is emitted as an event and / or passed to the convenience handler.
+Messages sent from a terminal stream are prefixed with a 32bit unsigned integer indicating the number of bytes they contain (accordingly the maximum message size is 2^32 bits or 4GB). As pieces of the message reach the next terminal stream in the pipeline, they are buffered into memory until the entire content is available, at which point a `message` event is dispatched with its `detail` property set to the content. Note that a terminal stream will only work with an ordered underlying transport.
 
 ## Example
 ``` javascript
-var ts = require('terminal-stream')
-var thru = require('through2')
+import TerminalStream from 'terminal-stream'
+import utf8 from 'utf8-transcoder'
 
-var a = ts(function (message) {
-  message = JSON.parse(message)
+var a = new TerminalStream()
+a.addEventListener('message', evt => {
+  message = JSON.parse(utf8.decode(message))
   console.log('a got:', message.name)
 })
 
-var b = ts(function (message) {
-  message = JSON.parse(message)
+var b = new TerminalStream()
+b.addEventListener('message', evt => {
+  message = JSON.parse(utf8.decode(message))
   console.log('b got:', message.name)
 
   if (message.name === 'hello') {
-    b.send(JSON.stringify({ name: 'world' }))
+    b.send(utf8.encode(JSON.stringify({ name: 'world' })))
   }
 })
 
-var chunkedTransport1 = mkchunked()
-var chunkedTransport2 = mkchunked()
-
-function mkchunked () {
-  return thru(function (c, e, cb) {
-    for (var i = 0; i < c.length; i++) {
-      this.push(c.slice(i, i + 1))
-    }
-    cb()
-  })
+a._send = message => {
+  for (var i = 0; i < message.length; i++) {
+    b.receive(message.subarray(i, i + 1))
+  }
 }
 
-a
-  .pipe(chunkedTransport1)
-  .pipe(b)
-  .pipe(chunkedTransport2)
-  .pipe(a)
+b._send = message => {
+  for (var i = 0; i < message.length; i++) {
+    a.receive(message.subarray(i, i + 1))
+  }
+}
 
-a.send(JSON.stringify({ name: 'hello' }))
+a.send(utf8.encode(JSON.stringify({ name: 'hello' })))
 // b got: hello
 // a got: world
 ```
-
-## Require
-#### `var ts = require('terminal-stream')`
+``` shell
+$ npm run example
+$ npm run example-browser
+```
 
 ## Constructor
-#### `var t = ts([onmessage])`
+#### `var t = new TerminalStream()`
 
 ## Methods
 #### `t.send(message)`
-#### `t.close()`
+#### `t._send(data)`
+Users must implement this with their transport of choice.
+#### `t.receive(data)`
+Users must pass data to this method from their transport of choice.
 
 ## Events
-#### `t.emit('message', message)`
+#### `t.dispatchEvent(new CustomEvent('message', { detail: message }))`
 
 ## Test
-Copied from [length-prefixed-stream](https://www.npmjs.com/package/length-prefixed-stream) with just the API differences changed.
 ``` shell
 $ npm test
+$ npm test-browser
 ```
 
 ## Prior art
@@ -73,4 +73,4 @@ $ npm test
 * [message-stream](https://www.npmjs.com/package/message-stream)
 
 ## License
-WTFPL
+MIT
