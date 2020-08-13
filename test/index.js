@@ -21,7 +21,7 @@ test('decode single packet message', t => {
 
 test('decode two messages contained within a single packet', t => {
   t.plan(1)
-  var expected = ['hello', 'world']
+  var expected = ['hello', 'world!']
   var actual = []
   var i = 0
   function onmessage (evt) {
@@ -49,7 +49,7 @@ test('decode two messages contained within a single packet', t => {
 
 test('decode two messages contained within two packets, where ~1.5 messages are in the first packet and the remaining ~0.5 are in the second packet', t => {
   t.plan(1)
-  var expected = ['hello', 'world']
+  var expected = ['hello', 'world!']
   var actual = []
   var i = 0
   function onmessage (evt) {
