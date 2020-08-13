@@ -55,7 +55,7 @@ class TerminalStream extends EventTarget {
         }
         if (this.state === 1) {
           // we were waiting to complete a header
-          this.awaiting = new DataView(this.buffer.buffer).getUint32(0, true)
+          this.awaiting = new DataView(this.buffer.buffer, this.buffer.byteOffset).getUint32(0, true)
           this.buffer = new Uint8Array(this.awaiting)
           this.position = 0
           this.state = 2
