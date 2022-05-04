@@ -1,7 +1,7 @@
 {
   "name": "terminal-stream",
   "description": "A message oriented wrapper for stream oriented transports",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "type": "module",
   "exports": {
     ".": "./index.js",
