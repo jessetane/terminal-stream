@@ -11,7 +11,7 @@ test('decode single packet message', t => {
   var message = utf8.encode(expected)
   function onmessage (evt) {
     b.removeEventListener('message', onmessage)
-    var actual = utf8.decode(evt.detail) 
+    var actual = utf8.decode(evt.data)
     t.equal(actual, expected)
   }
   b.addEventListener('message', onmessage)
@@ -25,7 +25,7 @@ test('decode two messages contained within a single packet', t => {
   var actual = []
   var i = 0
   function onmessage (evt) {
-    actual.push(utf8.decode(evt.detail))
+    actual.push(utf8.decode(evt.data))
     if (++i === 2) {
       b.removeEventListener('message', onmessage)
       t.arrayEqual(actual, expected)
@@ -53,7 +53,7 @@ test('decode two messages contained within two packets, where ~1.5 messages are 
   var actual = []
   var i = 0
   function onmessage (evt) {
-    actual.push(utf8.decode(evt.detail))
+    actual.push(utf8.decode(evt.data))
     if (++i === 2) {
       b.removeEventListener('message', onmessage)
       t.arrayEqual(actual, expected)
@@ -87,7 +87,7 @@ test('decode multi-packet message with packet size > header size', t => {
   var message = utf8.encode(expected)
   function onmessage (evt) {
     b.removeEventListener('message', onmessage)
-    var actual = utf8.decode(evt.detail) 
+    var actual = utf8.decode(evt.data)
     t.equal(actual, expected)
   }
   b.addEventListener('message', onmessage)
@@ -104,7 +104,7 @@ test('decode multi-packet message with packet size === header size', t => {
   var message = utf8.encode(expected)
   function onmessage (evt) {
     b.removeEventListener('message', onmessage)
-    var actual = utf8.decode(evt.detail) 
+    var actual = utf8.decode(evt.data)
     t.equal(actual, expected)
   }
   b.addEventListener('message', onmessage)
@@ -121,7 +121,7 @@ test('decode multi-packet message with packet size < header size', t => {
   var message = utf8.encode(expected)
   function onmessage (evt) {
     b.removeEventListener('message', onmessage)
-    var actual = utf8.decode(evt.detail) 
+    var actual = utf8.decode(evt.data)
     t.equal(actual, expected)
   }
   b.addEventListener('message', onmessage)

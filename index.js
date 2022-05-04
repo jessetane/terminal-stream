@@ -1,6 +1,3 @@
-import EventTarget from 'xevents/event-target.js'
-import CustomEvent from 'xevents/custom-event.js'
-
 const headerSize = 4
 const header = new Uint8Array(headerSize)
 
@@ -64,7 +61,9 @@ class TerminalStream extends EventTarget {
           }
         } else if (this.state === 2) {
           // we were waiting for more data
-          this.dispatchEvent(new CustomEvent('message', { detail: this.buffer }))
+          const evt = new Event('message')
+          evt.data = this.buffer
+          this.dispatchEvent(evt)
           this.buffer = null
           this.awaiting = this.position = this.state = 0
           if (data) {

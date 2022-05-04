@@ -5,7 +5,7 @@ A message oriented wrapper for stream oriented transports.
 Implementing something like RPC over a streaming transport (e.g. TCP) requires an intermediate mechanism to ensure only complete messages are delivered to the application, even though messages may be combined or fragmented in unpredictable ways.
 
 ## How
-Messages sent from a terminal stream are prefixed with a 32bit unsigned integer indicating the number of bytes they contain (accordingly the maximum message size is 2^32 bits or 4GB). As pieces of the message reach the next terminal stream in the pipeline, they are buffered into memory until the entire content is available, at which point a `message` event is dispatched with its `detail` property set to the content. Note that a terminal stream will only work with an ordered underlying transport.
+Messages sent from a terminal stream are prefixed with a 32bit unsigned integer indicating the number of bytes they contain (accordingly the maximum message size is 2^32 bits or 4GB). As pieces of the message reach the next terminal stream in the pipeline, they are buffered into memory until the entire content is available, at which point a `message` event is dispatched with its `data` property set to the content. Note that a terminal stream will only work with an ordered underlying transport.
 
 ## Example
 ``` javascript
@@ -14,13 +14,13 @@ import utf8 from 'utf8-transcoder'
 
 var a = new TerminalStream()
 a.addEventListener('message', evt => {
-  message = JSON.parse(utf8.decode(message))
+  var message = JSON.parse(utf8.decode(evt.data))
   console.log('a got:', message.name)
 })
 
 var b = new TerminalStream()
 b.addEventListener('message', evt => {
-  message = JSON.parse(utf8.decode(message))
+  var message = JSON.parse(utf8.decode(evt.data))
   console.log('b got:', message.name)
 
   if (message.name === 'hello') {
@@ -60,7 +60,8 @@ Users must implement this with their transport of choice.
 Users must pass data to this method from their transport of choice.
 
 ## Events
-#### `t.dispatchEvent(new CustomEvent('message', { detail: message }))`
+#### `t.dispatchEvent(new Event('message'))`
+Find message data on the `data` property of the event.
 
 ## Test
 ``` shell

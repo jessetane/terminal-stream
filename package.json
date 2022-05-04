@@ -5,7 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./index.js",
-    "./": "./"
+    "./*": "./*"
   },
   "scripts": {
     "test": "node test",
@@ -13,18 +13,12 @@
     "example": "node example",
     "example-browser": "ecstatic --cache no-cache --port 8080 example"
   },
-  "dependencies": {
-    "xevents": "^1.0.4"
-  },
   "devDependencies": {
     "ecstatic": "^4.1.4",
-    "tap-esm": "^1.4.1",
-    "utf8-transcoder": "^2.1.0"
+    "tap-esm": "^2.0.0",
+    "utf8-transcoder": "^2.1.1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/jessetane/terminal-stream.git"
-  },
+  "repository": "https://github.com/jessetane/terminal-stream",
   "author": "jesse.tane@gmail.com",
   "license": "MIT"
 }

@@ -3,13 +3,13 @@ import utf8 from 'utf8-transcoder'
 
 var a = new TerminalStream()
 a.addEventListener('message', evt => {
-  var message = JSON.parse(utf8.decode(evt.detail))
+  var message = JSON.parse(utf8.decode(evt.data))
   console.log('a got:', message.name)
 })
 
 var b = new TerminalStream()
 b.addEventListener('message', evt => {
-  var message = JSON.parse(utf8.decode(evt.detail))
+  var message = JSON.parse(utf8.decode(evt.data))
   console.log('b got:', message.name)
 
   if (message.name === 'hello') {
